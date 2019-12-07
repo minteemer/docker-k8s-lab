@@ -2,6 +2,7 @@ from task_manager.task_manager import TaskManager
 from pq import RMQConsumer, RMQProducer
 import logging
 import sys
+import os
 
 
 def make_config(host, queue, login, password):
@@ -25,8 +26,9 @@ log.addHandler(ch)
 log.info("Start application")
 
 # RABBIT MQ PRODUCER-CONSUMER SETTINGS
-producer_config = make_config("10.90.138.176", "MYW", "guest", "guest")
-consumer_config = make_config("10.90.138.176", "MyQ", "guest", "guest")
+host = os.environ["HOST"]
+producer_config = make_config(host, "MYW", "guest", "guest")
+consumer_config = make_config(host, "MyQ", "guest", "guest")
 producer = RMQProducer(producer_config)
 task_manager = TaskManager(producer)
 consumer = RMQConsumer(consumer_config, task_manager)
